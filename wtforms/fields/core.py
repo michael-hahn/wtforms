@@ -14,7 +14,10 @@ from wtforms.compat import text_type, izip
 from wtforms.i18n import DummyTranslations
 from wtforms.validators import StopValidation
 from wtforms.utils import unset_value
-
+# !!!SPLICE =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+# Splice-related imports
+from django.splice.splice import SpliceMixin
+# =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
 
 __all__ = (
     'BooleanField', 'DecimalField', 'DateField', 'DateTimeField', 'FieldList',
@@ -271,7 +274,11 @@ class Field(object):
         :param validation_stopped:
             `True` if any validator raised StopValidation.
         """
-        pass
+        # !!!SPLICE =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+        # A Splice data can be trusted Post validation
+        if isinstance(self.data, SpliceMixin):
+            self.data.to_trusted()
+        # =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
 
     def process(self, formdata, data=unset_value):
         """
